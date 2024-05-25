@@ -41,7 +41,7 @@ describe('Get Pet Use Case', () => {
       requirements: [],
     })
     const { pet } = await sut.execute({
-      petId: createdPet.id,
+      id: createdPet.id,
     })
     expect(pet.name).toEqual('Totó')
   })
@@ -49,7 +49,7 @@ describe('Get Pet Use Case', () => {
   it('should not be able to get pet with wrong id', async () => {
     await expect(() =>
       sut.execute({
-        petId: 'non-existing-id',
+        id: 'non-existing-id',
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
@@ -69,7 +69,7 @@ describe('Get Pet Use Case', () => {
     })
     await expect(() =>
       sut.execute({
-        petId: createdPet.id,
+        id: createdPet.id,
       }),
     ).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
