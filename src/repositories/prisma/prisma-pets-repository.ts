@@ -1,9 +1,25 @@
 import { prisma } from '@/lib/prisma'
-import { PetsRepository } from '@/repositories/pets-repository'
+import { PetsRepository, QueryProps } from '@/repositories/pets-repository'
 import { Pet, Prisma } from '@prisma/client'
-import dayjs from 'dayjs'
 
 export class PrismaPetsRepository implements PetsRepository {
+  async searchMany(orgIds: string[], query: QueryProps) {
+    const filter: any = {
+      org_id: {
+        in: orgIds,
+      },
+    }
+    if (query.age) filter.age = query.age
+    if (query.energy) filter.energy = query.energy
+    if (query.independence) filter.independence = query.independence
+    if (query.size) filter.size = query.size
+    const pet = await prisma.pet.findMany({
+      where: filter,
+    })
+
+    return pet
+  }
+
   async findById(id: string) {
     const pet = await prisma.pet.findUnique({
       where: {
@@ -12,45 +28,6 @@ export class PrismaPetsRepository implements PetsRepository {
     })
 
     return pet
-  }
-
-  async findByUserIdOnDate(userId: string, date: Date) {
-    const startOfTheDay = dayjs(date).startOf('date')
-    const endOfTheDay = dayjs(date).endOf('date')
-
-    const pet = await prisma.pet.findFirst({
-      where: {
-        user_id: userId,
-        created_at: {
-          gte: startOfTheDay.toDate(),
-          lte: endOfTheDay.toDate(),
-        },
-      },
-    })
-
-    return pet
-  }
-
-  async findManyByUserId(userId: string, page: number) {
-    const pets = await prisma.pet.findMany({
-      where: {
-        user_id: userId,
-      },
-      skip: (page - 1) * 20,
-      take: 20,
-    })
-
-    return pets
-  }
-
-  async countByUserId(userId: string) {
-    const count = await prisma.pet.count({
-      where: {
-        user_id: userId,
-      },
-    })
-
-    return count
   }
 
   async create(data: Prisma.PetUncheckedCreateInput) {

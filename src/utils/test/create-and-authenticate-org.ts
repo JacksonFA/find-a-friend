@@ -8,16 +8,18 @@ export async function createAndAuthenticateOrg(app: FastifyInstance) {
     data: {
       responsible: 'John Doe',
       email: 'johndoe@example.com',
+      phone: '123',
       password_hash: await hash('123456', 6),
       cep: '213456',
       address: 'e2e Tests',
+      city: 'Florianópolis',
       latitude: 123,
       longitude: 123,
     },
   })
 
   const authResponse = await request(app.server).post('/sessions').send({
-    email: 'org@example.com',
+    email: 'johndoe@example.com',
     password: '123456',
   })
 

@@ -1,13 +1,15 @@
 import { FastifyInstance } from 'fastify'
 
 import { verifyJwt } from '@/http/middlewares/verify-jwt'
+import { register } from './register'
+import { search } from './search'
+import { get } from './get'
 
-import { history } from './history'
-import { add } from './add'
 
 export async function petsRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJwt)
 
-  app.get('/pets/history', history)
-  app.post('/pets', add)
+  app.get('/pets', search)
+  app.get('/pets/:id', get)
+  app.post('/pets', register)
 }

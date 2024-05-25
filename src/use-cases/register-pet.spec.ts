@@ -1,5 +1,4 @@
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pets-repository'
-import { compare } from 'bcryptjs'
 import { expect, describe, it, beforeEach } from 'vitest'
 import { RegisterPetUseCase } from './register-pet'
 import { $Enums } from '@prisma/client'

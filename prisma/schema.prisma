@@ -47,6 +47,7 @@ model Org {
   phone         String
   cep           String
   address       String
+  city          String
   latitude      Decimal
   longitude     Decimal
   created_at    DateTime @default(now())

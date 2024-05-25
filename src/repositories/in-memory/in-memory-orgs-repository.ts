@@ -6,6 +6,10 @@ import { randomUUID } from 'node:crypto'
 export class InMemoryOrgsRepository implements OrgsRepository {
   public items: Org[] = []
 
+  async searchByCity(city: string) {
+    return this.items.filter((item) => item.city === city)
+  }
+
   async findById(id: string) {
     const org = this.items.find((item) => item.id === id)
     if (!org) return null
@@ -27,6 +31,7 @@ export class InMemoryOrgsRepository implements OrgsRepository {
       phone: String(data.phone),
       cep: data.cep,
       address: data.address,
+      city: data.city,
       latitude: new Decimal(Number(data.latitude)),
       longitude: new Decimal(Number(data.longitude)),
       created_at: new Date(),

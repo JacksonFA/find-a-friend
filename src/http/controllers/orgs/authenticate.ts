@@ -17,33 +17,23 @@ export async function authenticate(
   try {
     const authenticateUseCase = makeAuthenticateUseCase()
 
-    const { user } = await authenticateUseCase.execute({
+    const { org } = await authenticateUseCase.execute({
       email,
       password,
     })
 
-    const token = await reply.jwtSign(
-      {
-        role: user.role,
+    const token = await reply.jwtSign({
+      sign: {
+        sub: org.id,
       },
-      {
-        sign: {
-          sub: user.id,
-        },
-      },
-    )
+    })
 
-    const refreshToken = await reply.jwtSign(
-      {
-        role: user.role,
+    const refreshToken = await reply.jwtSign({
+      sign: {
+        sub: org.id,
+        expiresIn: '7d',
       },
-      {
-        sign: {
-          sub: user.id,
-          expiresIn: '7d',
-        },
-      },
-    )
+    })
 
     return reply
       .setCookie('refreshToken', refreshToken, {

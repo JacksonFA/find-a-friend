@@ -1,13 +1,18 @@
-import { PetsRepository } from '@/repositories/pets-repository'
-import { Prisma, Pet, $Enums } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
+import { Prisma, Pet } from '@prisma/client'
+import { PetsRepository, QueryProps } from '@/repositories/pets-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
   public items: Pet[] = []
 
-  async searchMany(query: string) {
-    const pet = this.items.find((item) => item.id === id)
-    if (!pet) return null
+  async searchMany(orgIds: string[], query: QueryProps) {
+    const pet = this.items.filter(
+      (item) =>
+        (orgIds.includes(item.org_id) && query.age && item.age === query.age) ||
+        (query.energy && item.energy === query.energy) ||
+        (query.size && item.size === query.size) ||
+        (query.independence && item.independence === query.independence),
+    )
     return pet
   }
 
